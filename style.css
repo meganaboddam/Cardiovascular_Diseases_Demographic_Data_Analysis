@@ -1,0 +1,17 @@
+/*We turn the font into Serif which is more appealing*/
+* {
+  font-family: Serif;
+} 
+
+/*This tomato color seems fitting for a cardiovascular topic*/
+h1 {
+  color: tomato;
+  font-family: Fantasy;
+  padding: 5px;
+}
+
+/*The .9 opacity seemed for fitting for the asthetics */
+p {
+  font-size: 15px;
+  opacity: .9;
+}

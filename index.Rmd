@@ -1,0 +1,127 @@
+---
+title: "Midpoint Deliverable"
+author: "Kai Jeffreys"
+date: "11/30/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+
+df <- read.csv("data/NHIS-Data.csv")
+
+source("scripts/summary_info_list.R")
+source("scripts/summary_info_table.R")
+source("scripts/race_and_CV_chart.R")
+source("scripts/Risk_factors_comparison.R")
+source("scripts/cv_and_risks_byAge_byRegion.R")
+```
+
+## Introduction
+For this assignment, we are using the NHIS Data set. The data was collected 
+through personal household interviews, where participants are asked a series of 
+questions about their personal health, including their heart. Data was collected
+by the NHIS, a branch of the CDC. The data shows the proportion of the people
+who surveyed had cardiovascular disease, among other risk factors, within in a 
+certain subset of the overall population of people surveyed. The proportion is
+shown in the Data_Value column as a percent. The data is sorted into breakout
+groups, like age, gender, or race. Since the breakout groups are all in one 
+column, it is hard to make an easy summary of the data, since there is so much 
+overlapping. It also has different columns for year and location, so there are 
+more ways to break down the data other than the breakout groups.
+
+## Summary Information
+```{r, echo=FALSE, message=FALSE}
+summary_info_list <- create_summary_info_list(df)
+```
+Since **`r summary_info_list$avg_risk_percent_us`**% of American's 
+are at risk of cardiovascular diseases and **`r summary_info_list$avg_diseases_percent_us`**
+% have cardiovascular diseases, heart issues are a top health concern. **`r summary_info_list$most_prevalent_risk`**
+is the most prevalent risk and **`r summary_info_list$most_prevalent_disease`** 
+the most prevalent cardiovascular disease. Between 2000 and 2012 both risk and cardiovascular diseases peeked in 
+**`r summary_info_list$highest_diseases_year`**. The housing market 
+crashing then increased stress levels and would have influenced risks and 
+diseases peeking.
+
+## Summary Table
+```{r, echo = FALSE, message=FALSE}
+kable(create_summary_table(df))
+```
+
+The breakout column had three dimensions: age, gender, and race. We picked 
+gender, so we didn't have overlays with the data values. Males tend to have a 
+higher average percent of cardiovascular diseases than females except for the 
+most prevalent one, hypertension. Females also report a higher percent of 
+inactivity, but a lower percent of smoking. Males have almost double acute 
+myocardial infarction (heart attack) than females. The other cardiovascular 
+disease that males and females have significant differences in is coronary heart 
+disease. This makes sense since a complete blockage from coronary heart disease
+can lead to a heart attack. 
+
+## Cardiovascular Disease and Race
+```{r, echo=FALSE, message=FALSE}
+bar_chart(df)
+```
+
+This bar chart helps show a relationship between race and the chance of having 
+major cardiovascular disease in the entirety of the US. Along with showing the 
+mean, the chart also shows the average low and high estimates. This is because showing just the mean might not be entirely reliable, but having the low and 
+high estimates show the range where the true average percent of each race should
+lie. 
+
+Information chart reveals:
+
+- That there is a difference in CV rates among different races. 
+- Non-Hispanic Asians have the lowest rates, followed by Non-Hispanic Whites. 
+- Non-Hispanic Blacks and others have clearly the highest rates, with others 
+having the highest by a significant margin (Other races include Native Americans
+, Pacific Islander, etc).
+
+## Risk Factors Comparison
+```{r, echo=FALSE, message=FALSE}
+create_line_graph(df)
+```
+
+This chart shows the relationships between the year and the percent of people
+who have or have used particular risk factors for cardiovascular disease. The 
+chart also breaks the data down for separate age groups.
+
+The chart shows:
+
+- The percent of people decreases for both being physically inactive and smoking
+as time goes on as we see the percent decreasing as the years get larger
+- The older a person gets, the more likely they are to be physically inactive,
+since the lines that include more elder people are the ones that are shown to 
+have a higher percent
+- The younger a person gets, the more likely the are to smoke, since the colors
+that include the young adults have higher percentages of smoking
+
+## Cardiovascular Diseases by Age and Region
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+cv_risks_age_and_region(df)
+```
+
+This attempts to understand the relationships between age, CV risk factors and
+the prevalence of CV Disease. It also attempts to see if these variables are 
+related differently in various geographical regions of the US from the years 
+2000 to 2017.
+
+Insights from the data include:
+
+- Regardless of age or region, people, medially, acquire cardiovascular (CV)
+diseases 
+at a smaller rate than people exhibit the risk factors (low physical activity 
+and smoking) in the US.
+- Older people correspond to a higher prevalence of CV risk factors and CV
+diseases in the US. 
+- The prevalence of CV risk factors before 64 years has q distribution with 
+outlying data points, but after 64 years, the data is more spread out with more 
+higher prevalence rates in the 4rd inter-quartile range of the box plots. This 
+is consistent with the jump in prevalence of CV diseases after 64 years of age.
+This strong correlation may be due to 64 being the retirement age in US. 
+- There are no significant differences in CV risk factors or diseases between
+various regions of the US.
